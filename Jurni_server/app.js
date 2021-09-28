@@ -6,15 +6,17 @@ const pgp = require('pg-promise')()
 const connectionString = 'postgres://zegafusk:vTO3n-Vlxp5xuS1QNKA6_ZRGr2MSBKBP@chunee.db.elephantsql.com/zegafusk'
 const db = pgp(connectionString)
 const bcrypt = require('bcryptjs')
+const cors = require('cors')
 
 app.use(express.json())
+app.use(cors())
 
 global.__basedir = __dirname
 
 //USER ROUTES
 
 //add new user 
-app.post('/add-user', (req, res) => {
+app.post('/api/add-user', (req, res) => {
     const firstName = req.body.firstName
     const lastName = req.body.lastName
     const email = req.body.email
@@ -42,7 +44,7 @@ app.post('/add-user', (req, res) => {
 })
 
 // user log in 
-app.post('/login', (req, res) => {
+app.post('/api/login', (req, res) => {
     const username = req.body.username
     const password = req.body.password
 
@@ -78,28 +80,25 @@ function uploadFile(req, callback) {
 }
 
 //test this in client side first 
-app.post('/upload', (req, res) => {
+app.post('/api/upload', (req, res) => {
     uploadFile(req, (photoURL) => {
         res.send("UPLOAD")
     })
 })
 
 //get all journeys for one user 
-app.get('/all-journeys',(req,res)=>{
-    const userId = req.body.userId
+app.get('/api/all-journeys/:userId',(req,res)=>{
+    const userId = req.params.userId
 
     console.log(userId)
     db.any('SELECT journey_id, title, description, start_date FROM journeys WHERE user_Id=$1', [userId])
     .then((journeys)=>{
-        console.log(journeys)
-        res.send(
-            'SUCCESS'
-        )
+        res.json(journeys)
     })
 })
 
 //start a journey
-app.post('/new-journey', (req, res) => {
+app.post('/api/new-journey', (req, res) => {
     const title = req.body.title
     const description = req.body.description
     const is_public = req.body.is_public
@@ -116,7 +115,7 @@ app.post('/new-journey', (req, res) => {
 
 
 //add a journal entry
-app.post('/add-entry', (req,res)=>{
+app.post('/api/add-entry', (req,res)=>{
     const title = req.body.title
     const entry = req.body.entry
     const userId = req.body.userId
