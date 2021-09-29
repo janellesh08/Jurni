@@ -32,7 +32,7 @@ app.post('/api/add-user', (req, res) => {
                 db.none('INSERT INTO users(first_name, last_name, email, username, password, about_me) VALUES ($1,$2,$3,$4,$5,$6)',[firstName, lastName, email, username, hash, aboutMe])
                  .then(() => {
                      res.json(
-                         {message: 'SUCCESS'})
+                         {message: 'USER ADDED'})
                          }
                          )
                  } else {
@@ -57,7 +57,7 @@ app.post('/api/login', (req, res) => {
                     error: "Password incorrect"
                 })
             }else{
-                res.json({message: 'You have been authenticated'}) 
+                res.json({userId:user.user_id, username: user.username}) 
             }
         })
 
@@ -97,8 +97,11 @@ app.get('/api/all-journeys/:userId',(req,res)=>{
     })
 })
 
+//user home page
+
+
 //start a journey
-app.post('/api/new-journey', (req, res) => {
+app.post('/api/new-journey/:userId', (req, res) => {
     const title = req.body.title
     const description = req.body.description
     const is_public = req.body.is_public
@@ -115,10 +118,10 @@ app.post('/api/new-journey', (req, res) => {
 
 
 //add a journal entry
-app.post('/api/add-entry', (req,res)=>{
+app.post('/api/add-entry/:userId/:journeyId', (req,res)=>{
     const title = req.body.title
     const entry = req.body.entry
-    const userId = req.body.userId
+    const userId = req.params.userId
     const journeyId = req.body.journeyId
     const entryUpload = req.body.entryUpload
 

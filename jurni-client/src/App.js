@@ -3,12 +3,14 @@ import './App.css';
 import DisplayUserJourneys from './components/DisplayUserJourneys';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginRegister from './components/LoginRegister';
+import React from 'react'
 
 
 function App() {
   return (
     <div>
-     <h1>App</h1>
+      <DisplayUserJourneys />
+    <LoginRegister />
     </div>
   )
 
