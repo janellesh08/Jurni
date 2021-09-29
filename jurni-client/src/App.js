@@ -6,11 +6,11 @@ import LoginRegister from './components/LoginRegister';
 
 
 function App() {
-return(
-<div><DisplayUserJourneys />
-<LoginRegister />
-</div>
-)
+  return (
+    <div>
+     <h1>App</h1>
+    </div>
+  )
 
 }
 
