@@ -1,5 +1,11 @@
+import DisplayUserJourneys from "./DisplayUserJourneys";
+
 function Home(){
+fetch('')
+
     return (
-       <h1>Home</h1> 
+        <DisplayUserJourneys />
     )
 }
+
+export default Home;

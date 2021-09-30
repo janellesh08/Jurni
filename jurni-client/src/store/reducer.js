@@ -9,11 +9,14 @@ const reducer = (state = initialState, action) => {
         case 'USER_LOGIN':
             return {
                 ...state,
-                userId: state.userId.concat(action.payload)
+                userId: action.payload
             }
+            default:
+                return state
     }
-    return state
+
 }
+
 
 export default reducer
 

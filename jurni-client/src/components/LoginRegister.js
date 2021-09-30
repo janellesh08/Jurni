@@ -3,16 +3,11 @@ import { useState } from "react"
 import { connect, useDispatch } from 'react-redux'
 
 
-function LoginRegister() {
+function LoginRegister(props) {
 
 
     const [user, setUser] = useState({
     })
-
-    // const [registerForm, setRegisterForm ] = useState({
-    //     username: '',
-    //     password: ''
-    // })
 
     const dispatch = useDispatch();
 
@@ -24,7 +19,6 @@ function LoginRegister() {
     }
 
     const handleLogin = (e) => {
-        console.log(user)
         fetch('http://localhost:8080/api/login', {
             method: 'POST',
             headers: {
@@ -37,6 +31,7 @@ function LoginRegister() {
         }).then(res => res.json())
             .then(userData => {
                 console.log(userData)
+            props.onLoginSubmit(userData.userId)
             })
     }
 
@@ -61,19 +56,6 @@ function LoginRegister() {
             })
     }
 
-
-//     fetch('localhost:8080/api/login')
-//     .then(response => response.json)
-//     .then(userData => console.log(userData))
-// }
-
-
-
-//const mapDispatchToProps = (dispatch) => {
-//     return{
-//         onLoginSubmit: (userId) => dispatch({type: 'USER_LOGIN', payload: userId})
-//     }
-// }
 
 return (
     <Container>
@@ -121,4 +103,11 @@ return (
 )
 }
 
-export default LoginRegister;
+const mapDispatchToProps = (dispatch) => {
+    return{
+        onLoginSubmit: (userId) => dispatch({type: 'USER_LOGIN', payload: userId})
+    }
+}
+
+
+export default connect(null, mapDispatchToProps)(LoginRegister);
