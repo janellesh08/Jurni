@@ -1,13 +1,35 @@
-import React from 'react';
+import { React } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import reducer from './store/reducer';
+import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import LoginRegister from './components/LoginRegister';
+import BaseLayout from './components/BaseLayout';
+import Home from './components/Home'; 
+import JourneyDetail from './components/JourneyDetail';
+import NewJourney from './components/NewJourney';
+
+const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <Provider store={store} >
+    <BrowserRouter>
+      <BaseLayout>
+        <Switch>
+          <Route component={App} path="/" exact />
+          <Route component={LoginRegister} path="/login/register" />
+          <Route component={Home} path="/home" />
+          <Route component={JourneyDetail} path="/journey-detail/:userId/:journeyId" />
+          <Route component={NewJourney} path="/start-new-journey" />
+        </Switch>
+      </BaseLayout>
+    </BrowserRouter>
+  </Provider>
+  ,
   document.getElementById('root')
 );
 
