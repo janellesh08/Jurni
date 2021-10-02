@@ -1,5 +1,6 @@
 const initialState = {
     userId: '',
+    journeyId: '',
     journeys: [],
     entries: []
 }
@@ -11,6 +12,11 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 userId: action.payload
             }
+        case 'ADD_ENTRY':
+            return {
+                ...state,
+                journeyId: action.payload
+            }
             default:
                 return state
     }
@@ -18,6 +24,6 @@ const reducer = (state = initialState, action) => {
 }
 
 
-export default reducer
+export default reducer;
 
 

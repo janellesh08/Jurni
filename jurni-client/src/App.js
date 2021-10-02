@@ -1,15 +1,12 @@
-import { useEffect, useState } from 'react';
-import './App.css';
-import DisplayUserJourneys from './components/DisplayUserJourneys';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import LoginRegister from './components/LoginRegister';
 import React from 'react'
 
 
-function App() {
+function App(props) {
   return (
     <div>
-    <LoginRegister />
+    <LoginRegister {...props} />
     </div>
   )
 

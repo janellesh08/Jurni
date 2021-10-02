@@ -1,10 +1,12 @@
 import { Col, Container, Row, Form, Button, FloatingLabel } from 'react-bootstrap'
 import { useState } from "react"
 import { connect, useDispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
 
 
 function LoginRegister(props) {
 
+let history = useHistory();
 
     const [user, setUser] = useState({
     })
@@ -31,7 +33,9 @@ function LoginRegister(props) {
         }).then(res => res.json())
             .then(userData => {
                 console.log(userData)
+            localStorage.setItem('userId', userData.userId)
             props.onLoginSubmit(userData.userId)
+            props.history.push('/home')
             })
     }
 
