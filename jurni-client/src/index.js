@@ -7,11 +7,11 @@ import { Provider } from 'react-redux';
 import { createStore } from 'redux';
 import reducer from './store/reducer';
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import LoginRegister from './components/LoginRegister';
 import BaseLayout from './components/BaseLayout';
 import Home from './components/Home'; 
 import JourneyDetail from './components/JourneyDetail';
 import NewJourney from './components/NewJourney';
+import LoginRegister from './components/LoginRegister';
 
 const store = createStore(reducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__())
 
@@ -23,7 +23,7 @@ ReactDOM.render(
           <Route component={App} path="/" exact />
           <Route component={LoginRegister} path="/login/register" />
           <Route component={Home} path="/home" />
-          <Route component={JourneyDetail} path="/journey-detail/:userId/:journeyId" />
+          <Route component={JourneyDetail} path="/journey-detail/:journeyId" />
           <Route component={NewJourney} path="/start-new-journey" />
         </Switch>
       </BaseLayout>

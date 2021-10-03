@@ -97,7 +97,30 @@ app.get('/api/all-journeys/:userId',(req,res)=>{
     })
 })
 
-//user home page
+//display all journal entires for one journey
+app.get('/api/all-journal-entries/:journeyId', (req,res)=>{
+    const journeyId = req.params.journeyId
+    const userId = req.params.userId
+
+    console.log(journeyId, userId)
+
+    db.any('SELECT entry_id, title, entry, date_created FROM journal_entries WHERE journey_id=$1', [journeyId])
+    .then((entries)=>{
+        res.json(entries)
+    })
+})
+
+//get one user journey for the journey detail page
+app.get('/api/journey-detail/:journeyId', (req,res)=>{
+    const journeyId = req.params.journeyId
+    
+    console.log(journeyId)
+
+    db.one('SELECT journey_id, title FROM journeys WHERE journey_id=$1', [journeyId])
+    .then((journey) => {
+        res.json(journey)
+    })
+})
 
 
 //start a journey
@@ -105,25 +128,23 @@ app.post('/api/new-journey/:userId', (req, res) => {
     const title = req.body.title
     const description = req.body.description
     const is_public = req.body.is_public
-    const userId = req.body.userId
+    const userId = req.params.userId
 
     db.none('INSERT INTO journeys (title, description, is_public, user_id) VALUES($1,$2,$3,$4)',[title, description, is_public, userId])
     .then(()=>{
         console.log('New journey started')
-        res.send(
-            'SUCCESS'
-        )
+        res.json({success: true})
     })
 })
 
 
 //add a journal entry
-app.post('/api/add-entry/:userId/:journeyId', (req,res)=>{
+app.post('/api/add-entry/:journeyId', (req,res)=>{
     const title = req.body.title
     const entry = req.body.entry
-    const userId = req.params.userId
-    const journeyId = req.body.journeyId
-    const entryUpload = req.body.entryUpload
+    const userId = req.body.userId
+    const journeyId = req.params.journeyId
+    // const entryUpload = req.body.entryUpload
 
     // function uploadFile(req, callback) {
     //     new formidable.IncomingForm().parse(req)
@@ -139,8 +160,7 @@ app.post('/api/add-entry/:userId/:journeyId', (req,res)=>{
     db.none('INSERT INTO journal_entries (title, entry, journey_id, user_id) VALUES ($1, $2, $3, $4)',[title, entry, journeyId, userId])
     .then(()=>{
         console.log('New entry added')
-        res.send(
-            'SUCCESS'
+        res.json({success: true}
         )
     })
 })
