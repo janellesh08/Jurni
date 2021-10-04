@@ -20,7 +20,7 @@ function DisplayUserJourneys(props) {
     }, [])
 
     const loadJourneys = () => {
-        fetch(`http://localhost:8080/api/all-journeys/${props.userId}`)
+        fetch(`https://git.heroku.com/serene-reaches-03833.git/api/all-journeys/${props.userId}`)
             .then(response => response.json())
             .then(journeys => {
                 setJourneys(journeys)

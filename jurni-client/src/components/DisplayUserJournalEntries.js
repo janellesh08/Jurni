@@ -16,7 +16,7 @@ function DisplayUserJournalEntries(props){
     }, [])
 
     const loadEntries = () => {
-        fetch(`http://localhost:8080/api/all-journal-entries/${props.journeyId}`)
+        fetch(`https://git.heroku.com/serene-reaches-03833.git/api/all-journal-entries/${props.journeyId}`)
             .then(response => response.json())
             .then(fetchedEntries => {
                 console.log('entires',fetchedEntries)

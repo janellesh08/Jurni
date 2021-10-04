@@ -21,7 +21,7 @@ function NewJourney(props) {
 
     const handleJourneySave = (e) => {
 
-        fetch(`http://localhost:8080/api/new-journey/${props.userId}`, {
+        fetch(`https://git.heroku.com/serene-reaches-03833.git/api/new-journey/${props.userId}`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

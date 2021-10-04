@@ -42,7 +42,7 @@ function NewJournalEntry(props) {
         const journeyId = url.substring(url.lastIndexOf('/') + 1);
         console.log(journeyId)
 
-        fetch(`http://localhost:8080/api/add-entry/${journeyId}`, {
+        fetch(`https://git.heroku.com/serene-reaches-03833.git/api/add-entry/${journeyId}`, {
         method: 'POST',
             headers: {
             'Content-Type': 'application/json'

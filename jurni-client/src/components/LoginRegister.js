@@ -21,7 +21,7 @@ let history = useHistory();
     }
 
     const handleLogin = (e) => {
-        fetch('http://localhost:8080/api/login', {
+        fetch('https://git.heroku.com/serene-reaches-03833.git/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -42,7 +42,7 @@ let history = useHistory();
 
     const handleCreateAccount = (e) => {
         e.preventDefault()
-        fetch('http://localhost:8080/api/add-user', {
+        fetch('https://git.heroku.com/serene-reaches-03833.git/api/add-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
