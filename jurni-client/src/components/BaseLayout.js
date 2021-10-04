@@ -13,7 +13,6 @@ function BaseLayout(props){
         <div>
           {props.userId != ""? <Menu />: null}
             {props.children}
-            <footer>Footer</footer>
         </div>
     )
 }

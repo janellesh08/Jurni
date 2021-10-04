@@ -26,17 +26,23 @@ function NewJournalEntry(props) {
 
     }
 
-    const handleLoadJourney = () => {
-        fetch(`/api/journey-detail/${props.journeyId}`)
-        .then(response => response.json())
-        .then(journey => {
-            setJourney(journey)
-        })
-    }
+    // const handleLoadJourney = () => {
+    //     fetch(`/api/journey-detail/${props.journeyId}`)
+    //     .then(response => response.json())
+    //     .then(journey => {
+    //         setJourney(journey)
+    //     })
+    // }
 
 
     const handleEntrySave = (e) => {
-        fetch(`http://localhost:8080/api/add-entry/${props.journeyId}`, {
+
+
+        var url = window.location.pathname;
+        const journeyId = url.substring(url.lastIndexOf('/') + 1);
+        console.log(journeyId)
+
+        fetch(`http://localhost:8080/api/add-entry/${journeyId}`, {
         method: 'POST',
             headers: {
             'Content-Type': 'application/json'
@@ -45,19 +51,19 @@ function NewJournalEntry(props) {
             title: entry.title,
             entry: entry.entry,
             userId: entry.userId,
-            journeyId: entry.journeyId
+            journeyId: journeyId
         })
     }).then(response => response.json())
         .then(result => {
             console.log(result)
             localStorage.setItem('journeyId', result.journeyId)
             props.onSaveEntry(result.journeyId)
-            props.history.push(`/journey-detail/${props.journeyId}`)
+            // props.history.push(`/journey-detail/${journeyId}`)
         })
 }
 
 
-handleLoadJourney()
+
 
 return (
     <div>
@@ -66,10 +72,10 @@ return (
             label="Title"
             className="mb-3"
         >
-            <Form.Control onChange={handleEntryChange} type="text" placeholder="title" />
+            <Form.Control name="title" onChange={handleEntryChange} type="text" placeholder="title" />
         </FloatingLabel>
         <FloatingLabel controlId="floatingInput" label="Entry">
-            <Form.Control onChange={handleEntryChange} type="text" placeholder="entry" />
+            <Form.Control name="entry" onChange={handleEntryChange} type="text" placeholder="entry" />
         </FloatingLabel>
 
         <Button onClick={handleEntrySave} variant="primary">Add Journal Entry</Button>{' '}
