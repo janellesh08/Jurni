@@ -15,6 +15,8 @@ function NewJournalEntry(props) {
 
     const [entry, setEntry] = useState({})
 
+    const [entries, setEntries] = useState({})
+
     
 
     const handleEntryChange = (e) => {
@@ -26,13 +28,23 @@ function NewJournalEntry(props) {
 
     }
 
-    // const handleLoadJourney = () => {
-    //     fetch(`/api/journey-detail/${props.journeyId}`)
-    //     .then(response => response.json())
-    //     .then(journey => {
-    //         setJourney(journey)
-    //     })
-    // }
+    const loadEntries = () => {
+
+        const token = localStorage.getItem('jsonwebtoken')
+
+        fetch(`http://localhost:8080/api/all-journal-entries/${props.journeyId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
+            .then(response => response.json())
+            .then(fetchedEntries => {
+                console.log('entries',fetchedEntries)
+                setEntries(fetchedEntries)
+                props.onEntriesLoaded(fetchedEntries)
+            })
+    }
 
 
     const handleEntrySave = (e) => {
@@ -42,10 +54,13 @@ function NewJournalEntry(props) {
         const journeyId = url.substring(url.lastIndexOf('/') + 1);
         console.log(journeyId)
 
-        fetch(`https://git.heroku.com/serene-reaches-03833.git/api/add-entry/${journeyId}`, {
+        const token = localStorage.getItem('jsonwebtoken')
+
+        fetch(`http://localhost:8080/api/add-entry/${journeyId}`, {
         method: 'POST',
             headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
             title: entry.title,
@@ -58,6 +73,8 @@ function NewJournalEntry(props) {
             console.log(result)
             localStorage.setItem('journeyId', result.journeyId)
             props.onSaveEntry(result.journeyId)
+            loadEntries()
+            console.log(entries)
             // props.history.push(`/journey-detail/${journeyId}`)
         })
 }
@@ -94,7 +111,7 @@ const mapStateToProps = (state) => {
 
   const mapDispatchToProps = (dispatch) => {
     return {
-        onSaveEntry: (journeyId) => dispatch({type: 'ADD_ENTRY', payload: journeyId}),
+        onSaveEntry: (entries) => dispatch({type: 'ADD_ENTRY', payload: entries})
     //     onLoad: (journeyId) => dispatch({type: 'LOAD_JOURNEY', payload: journeyId})
     }
 }

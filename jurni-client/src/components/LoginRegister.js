@@ -11,6 +11,8 @@ let history = useHistory();
     const [user, setUser] = useState({
     })
 
+    const[jsonwebtoken, setJsonWebToken] = useState({})
+
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
@@ -20,8 +22,9 @@ let history = useHistory();
         })
     }
 
+
     const handleLogin = (e) => {
-        fetch('https://git.heroku.com/serene-reaches-03833.git/api/login', {
+        fetch('http://localhost:8080/api/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -34,6 +37,7 @@ let history = useHistory();
             .then(userData => {
                 console.log(userData)
             localStorage.setItem('userId', userData.userId)
+            localStorage.setItem('jsonwebtoken', userData.token)
             props.onLoginSubmit(userData.userId)
             props.history.push('/home')
             })
@@ -42,7 +46,7 @@ let history = useHistory();
 
     const handleCreateAccount = (e) => {
         e.preventDefault()
-        fetch('https://git.heroku.com/serene-reaches-03833.git/api/add-user', {
+        fetch('https://serene-reaches-03833.herokuapp.com/api/add-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
