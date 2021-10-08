@@ -17,6 +17,17 @@ const reducer = (state = initialState, action) => {
                 ...state,
                 journeyId: action.payload
             }
+        case 'JOURNEYS_LOADED':
+            return {
+                ...state,
+                journeys: action.payload
+            }  
+        case 'ENTRIES_LOADED':
+            return {
+                ...state,
+                entries: action.payload
+            } 
+        
             default:
                 return state
     }

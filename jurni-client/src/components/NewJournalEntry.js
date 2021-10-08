@@ -15,6 +15,8 @@ function NewJournalEntry(props) {
 
     const [entry, setEntry] = useState({})
 
+    const [entries, setEntries] = useState({})
+
     
 
     const handleEntryChange = (e) => {
@@ -26,38 +28,59 @@ function NewJournalEntry(props) {
 
     }
 
-    const handleLoadJourney = () => {
-        fetch(`/api/journey-detail/${props.journeyId}`)
-        .then(response => response.json())
-        .then(journey => {
-            setJourney(journey)
+    const loadEntries = () => {
+
+        const token = localStorage.getItem('jsonwebtoken')
+
+        fetch(`http://localhost:8080/api/all-journal-entries/${props.journeyId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
         })
+            .then(response => response.json())
+            .then(fetchedEntries => {
+                console.log('entries',fetchedEntries)
+                setEntries(fetchedEntries)
+                props.onEntriesLoaded(fetchedEntries)
+            })
     }
 
 
     const handleEntrySave = (e) => {
-        fetch(`http://localhost:8080/api/add-entry/${props.journeyId}`, {
+
+
+        var url = window.location.pathname;
+        const journeyId = url.substring(url.lastIndexOf('/') + 1);
+        console.log(journeyId)
+
+        const token = localStorage.getItem('jsonwebtoken')
+
+        fetch(`http://localhost:8080/api/add-entry/${journeyId}`, {
         method: 'POST',
             headers: {
-            'Content-Type': 'application/json'
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
         },
         body: JSON.stringify({
             title: entry.title,
             entry: entry.entry,
             userId: entry.userId,
-            journeyId: entry.journeyId
+            journeyId: journeyId
         })
     }).then(response => response.json())
         .then(result => {
             console.log(result)
             localStorage.setItem('journeyId', result.journeyId)
             props.onSaveEntry(result.journeyId)
-            props.history.push(`/journey-detail/${props.journeyId}`)
+            loadEntries()
+            console.log(entries)
+            // props.history.push(`/journey-detail/${journeyId}`)
         })
 }
 
 
-handleLoadJourney()
+
 
 return (
     <div>
@@ -66,10 +89,10 @@ return (
             label="Title"
             className="mb-3"
         >
-            <Form.Control onChange={handleEntryChange} type="text" placeholder="title" />
+            <Form.Control name="title" onChange={handleEntryChange} type="text" placeholder="title" />
         </FloatingLabel>
         <FloatingLabel controlId="floatingInput" label="Entry">
-            <Form.Control onChange={handleEntryChange} type="text" placeholder="entry" />
+            <Form.Control name="entry" onChange={handleEntryChange} type="text" placeholder="entry" />
         </FloatingLabel>
 
         <Button onClick={handleEntrySave} variant="primary">Add Journal Entry</Button>{' '}
@@ -88,7 +111,7 @@ const mapStateToProps = (state) => {
 
   const mapDispatchToProps = (dispatch) => {
     return {
-        onSaveEntry: (journeyId) => dispatch({type: 'ADD_ENTRY', payload: journeyId}),
+        onSaveEntry: (entries) => dispatch({type: 'ADD_ENTRY', payload: entries})
     //     onLoad: (journeyId) => dispatch({type: 'LOAD_JOURNEY', payload: journeyId})
     }
 }

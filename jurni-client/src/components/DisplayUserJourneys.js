@@ -6,24 +6,28 @@ import { useHistory } from 'react-router-dom';
 
 function DisplayUserJourneys(props) {
     const [journeys, setJourneys] = useState([]
-        // title: '',
-        // description: '',
-        // user_id: '',
-        // journey_id: '',
+
     )
 
-
-
     useEffect(() => {
-        console.log('fired')
         loadJourneys()
     }, [])
 
     const loadJourneys = () => {
-        fetch(`http://localhost:8080/api/all-journeys/${props.userId}`)
+
+        const token = localStorage.getItem('jsonwebtoken')
+        const userId = localStorage.getItem('userId')
+        fetch(`http://localhost:8080/api/all-journeys/${userId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(journeys => {
+                console.log(journeys)
                 setJourneys(journeys)
+                props.onJourneysLoaded(journeys)
             })
     }
 
@@ -54,10 +58,16 @@ function DisplayUserJourneys(props) {
 const mapStateToProps = (state) => {
     return {
         userId: state.userId,
-        journeys: state.journeys
+        // journeys: state.journeys
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onJourneysLoaded: (journeys) => dispatch({type: 'JOURNEYS_LOADED', payload: journeys})
     }
 }
 
 
 
-export default connect(mapStateToProps)(DisplayUserJourneys);
+export default connect(mapStateToProps, mapDispatchToProps)(DisplayUserJourneys);

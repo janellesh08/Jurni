@@ -11,6 +11,8 @@ const cors = require('cors')
 app.use(express.json())
 app.use(cors())
 
+const PORT = process.env.PORT || 8080
+
 global.__basedir = __dirname
 
 //USER ROUTES
@@ -177,6 +179,6 @@ app.use('uploads', express.static('uploads'))
 
 
 
-app.listen(8080, (req, res) => {
+app.listen(PORT, (req, res) => {
     console.log('Jurni server is running')
 })

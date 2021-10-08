@@ -2,6 +2,7 @@ import React from 'react';
 import { Card } from 'react-bootstrap';
 import { NavLink } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { connect } from 'react-redux';
 
 
 function DisplayUserJournalEntries(props){
@@ -16,11 +17,20 @@ function DisplayUserJournalEntries(props){
     }, [])
 
     const loadEntries = () => {
-        fetch(`http://localhost:8080/api/all-journal-entries/${props.journeyId}`)
+
+        const token = localStorage.getItem('jsonwebtoken')
+
+        fetch(`http://localhost:8080/api/all-journal-entries/${props.journeyId}`, {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        })
             .then(response => response.json())
             .then(fetchedEntries => {
-                console.log('entires',fetchedEntries)
+                console.log('entries',fetchedEntries)
                 setEntries(fetchedEntries)
+                props.onEntriesLoaded(fetchedEntries)
             })
     }
 
@@ -45,4 +55,17 @@ function DisplayUserJournalEntries(props){
     )
 }
 
-export default DisplayUserJournalEntries;
+
+const mapStateToProps = (state) => {
+    return {
+         journeys: state.journeys
+    }
+}
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        onEntriesLoaded: (entries) => dispatch({type: 'ENTRIES_LOADED', payload: entries})
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps) (DisplayUserJournalEntries);

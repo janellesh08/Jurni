@@ -11,6 +11,8 @@ let history = useHistory();
     const [user, setUser] = useState({
     })
 
+    const[jsonwebtoken, setJsonWebToken] = useState({})
+
     const dispatch = useDispatch();
 
     const handleChange = (e) => {
@@ -19,6 +21,7 @@ let history = useHistory();
             [e.target.name]: e.target.value
         })
     }
+
 
     const handleLogin = (e) => {
         fetch('http://localhost:8080/api/login', {
@@ -34,6 +37,7 @@ let history = useHistory();
             .then(userData => {
                 console.log(userData)
             localStorage.setItem('userId', userData.userId)
+            localStorage.setItem('jsonwebtoken', userData.token)
             props.onLoginSubmit(userData.userId)
             props.history.push('/home')
             })
@@ -42,7 +46,7 @@ let history = useHistory();
 
     const handleCreateAccount = (e) => {
         e.preventDefault()
-        fetch('http://localhost:8080/api/add-user', {
+        fetch('https://serene-reaches-03833.herokuapp.com/api/add-user', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
